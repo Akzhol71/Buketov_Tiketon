@@ -1,7 +1,7 @@
 let tg = window.Telegram.WebApp;
 tg.expand();
 
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxTsS8QZKDhr3zeP3AUGIjb82wPdWjpUCTX-iVcFqRmEFLGP0VWKqEGKI_IQFPEylJCtw/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyJOoaLJEA8NykMEGmc8fJ45CuiGYeDAimSqddLUh2_GGUPod8otfrXK6t9XyffxZpmbg/exec";
 
 const events = [
   {
@@ -99,7 +99,7 @@ function fetchBookedSeats() {
     .then(res => res.json())
     .then(data => {
       bookedSeats = data.booked || [];
-      console.log("🔴 Booked seats:", bookedSeats); // Debug
+      console.log("🔴 Booked seats:", bookedSeats);
       drawSeatMap();
     })
     .catch(err => {
@@ -123,10 +123,11 @@ function drawSeatMap() {
       const seatId = `${row}-қатар ${col}-орын`;
       const td = document.createElement("td");
       td.textContent = col;
+      td.setAttribute("data-seat", seatId);
       td.className = "p-2 border text-sm text-center";
 
       if (bookedSeats.includes(seatId)) {
-        td.classList.add("bg-red-200", "text-gray-500", "cursor-not-allowed");
+        td.classList.add("bg-red-500", "text-white", "cursor-not-allowed", "opacity-70");
       } else {
         td.classList.add("bg-gray-100", "hover:bg-green-300", "cursor-pointer");
         td.onclick = () => toggleSeat(td, seatId);
