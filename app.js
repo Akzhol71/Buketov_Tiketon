@@ -1,7 +1,7 @@
 let tg = window.Telegram.WebApp;
 tg.expand();
 
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyJOoaLJEA8NykMEGmc8fJ45CuiGYeDAimSqddLUh2_GGUPod8otfrXK6t9XyffxZpmbg/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxTsS8QZKDhr3zeP3AUGIjb82wPdWjpUCTX-iVcFqRmEFLGP0VWKqEGKI_IQFPEylJCtw/exec";
 
 const events = [
   {
