@@ -1,7 +1,8 @@
 let tg = window.Telegram.WebApp;
 tg.expand();
 
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxTsS8QZKDhr3zeP3AUGIjb82wPdWjpUCTX-iVcFqRmEFLGP0VWKqEGKI_IQFPEylJCtw/exec";
+// 👇 ВСТАВЬ СЮДА свой actual Google Script URL:
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyJOoaLJEA8NykMEGmc8fJ45CuiGYeDAimSqddLUh2_GGUPod8otfrXK6t9XyffxZpmbg/exec";
 
 const events = [
   {
@@ -66,9 +67,10 @@ function selectEvent(id) {
   selectedEvent = events.find(e => e.id === id);
   selectedSeats = [];
   bookedSeats = [];
-  eventTitle.textContent = `${selectedEvent.title} | ${selectedEvent.place}`;
+  eventTitle.textContent = selectedEvent.title + " | " + selectedEvent.place;
   bookingSection.classList.remove("hidden");
 
+  // Fill date select
   dateSelect.innerHTML = "";
   dateList.forEach(date => {
     const option = document.createElement("option");
@@ -78,7 +80,7 @@ function selectEvent(id) {
   });
   selectedDate = dateList[0];
 
-  fetchBookedSeats();
+  fetchBookedSeats(); // Загрузим занятые места
 }
 
 dateSelect.onchange = () => {
@@ -94,16 +96,14 @@ function fetchBookedSeats() {
   if (!selectedEvent || !selectedDate || !selectedTime) return;
 
   const url = `${GOOGLE_SCRIPT_URL}?title=${encodeURIComponent(selectedEvent.title)}&date=${selectedDate}&time=${selectedTime}`;
-
   fetch(url)
     .then(res => res.json())
     .then(data => {
       bookedSeats = data.booked || [];
-      console.log("🔴 Booked seats:", bookedSeats);
       drawSeatMap();
     })
     .catch(err => {
-      console.error("❌ Қате орындарды алу кезінде:", err);
+      console.error("Ошибка при получении занятых мест:", err);
       bookedSeats = [];
       drawSeatMap();
     });
@@ -113,29 +113,25 @@ function drawSeatMap() {
   seatTable.innerHTML = "";
   for (let row = 1; row <= 10; row++) {
     const tr = document.createElement("tr");
-
     const rowLabel = document.createElement("td");
     rowLabel.textContent = `${row}-қатар`;
-    rowLabel.className = "p-1 font-medium bg-gray-100 text-center";
+    rowLabel.className = "p-1 font-medium bg-gray-100";
     tr.appendChild(rowLabel);
 
     for (let col = 1; col <= 10; col++) {
       const seatId = `${row}-қатар ${col}-орын`;
       const td = document.createElement("td");
       td.textContent = col;
-      td.setAttribute("data-seat", seatId);
-      td.className = "p-2 border text-sm text-center";
 
       if (bookedSeats.includes(seatId)) {
-        td.classList.add("bg-red-500", "text-white", "cursor-not-allowed", "opacity-70");
+        td.className = "p-2 border bg-red-200 text-gray-500 text-sm cursor-not-allowed";
       } else {
-        td.classList.add("bg-gray-100", "hover:bg-green-300", "cursor-pointer");
+        td.className = "p-2 border cursor-pointer bg-gray-100 hover:bg-green-300 text-sm";
         td.onclick = () => toggleSeat(td, seatId);
       }
 
       tr.appendChild(td);
     }
-
     seatTable.appendChild(tr);
   }
 }
